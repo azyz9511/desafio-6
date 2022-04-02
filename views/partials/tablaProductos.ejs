@@ -1,0 +1,12 @@
+<% if (productos.length !== 0) { %>
+    <div class=" row align-items-center justify-content-center">
+        <div class="col-sm-4 bg-light border border-secondary rounded shadow p-3 mb-5"> 
+            <div class="table-responsive">
+                <table class="table text-secondary" id="productos">
+                </table>
+            </div>
+        </div>
+    </div>
+<% }else{ %>
+    <%- include('../partials/mensajeError'); %>
+<% } %>
