@@ -2,6 +2,7 @@ const socket = io.connect();
 
 // tabla productos
 // ---------------------------------------------------------------------------------------------------------------------------------------
+
 const formProductos = document.getElementById('formulario');
 formProductos.addEventListener('submit',(e) => {
     e.preventDefault();
@@ -20,47 +21,54 @@ formProductos.addEventListener('submit',(e) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(datos)
-    });
+    })
+    .then( response => {
+        if(response.ok) {
+            socket.emit('guardar','guardado con exito');
+            socket.on('historialGuardar', data => {
+                if(data.length !== 0){
+                    render(data)
+                }
+            });
+        }
+     })
+     .catch( error => {
+        console.log(error);
+     });
 
     formProductos.reset();
 
-    socket.emit('guardar','guardado con exito');
-    socket.on('historialGuardar', data => {
-        console.log(data);
-        if(data.length !== 0){
-            render(data)
-        }
-    });
-
 });
 
-
 function render(data) {
-    const table = `<tr><td colspan="3"><h2 class="text-center text-secondary">Productos</h2></td></tr>
-                    <tr><th><h5>Nombre</h5></th><th><h5>Precio</h5></th><th><h5>Foto</h5></th></tr>`;
-    const html = data
-    .map((elem, index) => {
-        return `<tr>
-        <td>${elem.title}</td>
-        <td>${elem.price}</td>
-        <td><img width="50" src="${elem.thumbnail}"></td>
-        </tr>`
-    })
-    .join(' ');
-    const tableComplete = table + html;
-    document.getElementById('productos').innerHTML = tableComplete;
+    if(data.length !== 0){
+        const table = `<tr><th><h5>Nombre</h5></th><th><h5>Precio</h5></th><th><h5>Foto</h5></th></tr>`;
+        const html = data
+        .map((elem, index) => {
+            return `<tr>
+            <td>${elem.title}</td>
+            <td>${elem.price}</td>
+            <td><img width="50" src="${elem.thumbnail}"></td>
+            </tr>`
+        })
+        .join(' ');
+        const tableComplete = table + html;
+        document.getElementById('productos').innerHTML = tableComplete;
+    }else{
+        document.getElementById('productos').innerHTML = '';
+    }
 }
 
 socket.on('historialProductos', data => {
-    if(data.length !== 0){
-        render(data)
-    }
+    render(data)
 });
 
 // chat
 // -----------------------------------------------------------------------------------------------------------------------------------------
 
-function enviar(){
+const formChat = document.getElementById('formChat');
+formChat.addEventListener('submit',(e) => {
+    e.preventDefault();
     const fyh = new Date();
     const mensaje = {
         email: document.getElementById('email').value,
@@ -80,11 +88,11 @@ function enviar(){
         .join(' ');
         document.getElementById('mensajes').innerHTML = html;
     });
-    // return false;
-}
+});
 
 socket.on('historialChat', data => {
-    const html = data
+    if(data.length !== 0){
+        const html = data
         .map((elem, index) => {
             return `<div>
             <b style='color:blue;'>${elem.email}</b>
@@ -94,4 +102,8 @@ socket.on('historialChat', data => {
         })
         .join(' ');
         document.getElementById('mensajes').innerHTML = html;
+    }else{
+        document.getElementById('mensajes').innerHTML = '';
+        formChat.reset();
+    }
 });
