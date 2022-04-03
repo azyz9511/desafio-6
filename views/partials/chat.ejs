@@ -1,14 +1,16 @@
 <div class=" row align-items-center justify-content-center">
     <div class="col-sm-4 bg-light border border-secondary rounded shadow p-3 mb-5"> 
         <h2 class="text-center">Centro de Mensajes</h2>
-        <b>Email:</b>
-        <br>
-        <input type="email" class="form-control" id="email" value="example@example.com" required>
-        <hr>
-        <div id="mensajes"></div>
-        <br>
-        <input type="text" class="form-control" id="texto" placeholder="Ingrese texto" required>
-        <br>
-        <input type='button' onclick='enviar()' value="enviar"> </input>
+        <form id="formChat">
+            <b>Email:</b>
+            <br>
+            <input type="email" class="form-control" id="email" placeholder="example@example.com" required>
+            <hr>
+            <div id="mensajes"></div>
+            <br>
+            <input type="text" class="form-control" id="texto" placeholder="Ingrese mensaje" required>
+            <br>
+            <input type='submit' id="btnEnviar" class="btn btn-outline-success" value="enviar"> </input>
+        </form>
     </div>
 </div>
