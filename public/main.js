@@ -88,6 +88,7 @@ formChat.addEventListener('submit',(e) => {
         .join(' ');
         document.getElementById('mensajes').innerHTML = html;
     });
+    document.getElementById('texto').value = '';
 });
 
 socket.on('historialChat', data => {
